@@ -163,7 +163,7 @@
         <p>These averages are displayed in the diagram to compare the quality of the different RAG approaches.</p>
 
         <p>This evaluation in particular allows testing how effective a RAG method is at retrieving sufficient information to answer the user’s query accurately and comprehensively.</p>
-        <img src="http://srv-ironman.meritisnet.fr:8510/images/Image1.png" style="display: block; margin: auto; margin-bottom: 20px"/>
+        <img src="https://meritisgroup.github.io/OpenRAG/images/Image1.png" style="display: block; margin: auto; margin-bottom: 20px"/>
         In this example, the Semantic Chunking RAG achieved an average of 4/5 for the Accuracy metric and an average of 4.33/5 for the Relevance and Exhaustiveness metrics. 
         <div class="note">
             <p><strong>Note</strong>: The quality of the responses depends heavily on the LLM model used. However, this benchmarking tool focuses exclusively on RAG methods and not on model comparison. Since the same model is employed for all generations, with a sufficiently large sample of questions and answers, this evaluation provides an initial, relevant indication of the relative performance of the selected RAG methods.</p>
@@ -200,7 +200,7 @@
 
         <p>The score ranges from 0 (no statement supported) to 100 (all statements supported).</p>
         Example:
-        <img src="http://srv-ironman.meritisnet.fr:8510/images/Image2.png" style="display: block; margin: auto; margin-bottom: 20px"/>
+        <img src="https://meritisgroup.github.io/OpenRAG/images/Image2.png" style="display: block; margin: auto; margin-bottom: 20px"/>
         <p>In this example, the Semantic Chunking RAG achieved a score of over 90/100 for context faithfulness—meaning the provided contexts largely allow the questions to be answered—yet it scored only about 6.5/100 for context relevance, indicating that the majority of the text in the provided contexts is useless for answering the questions. </p>
 
         <p>A subtle balance exists between these two metrics. Relevance measures the “noise” present in the final prompt. Generally, the smaller the model, the less resilient it is to noise, which can cause hallucinations even if all necessary information is present in the retrieved context. Therefore, increasing the amount of context supplied usually raises context faithfulness but also lowers context relevance.</p>
@@ -238,7 +238,7 @@
             <li>The blue portion corresponds to the RAG on the row (row of the table).</li>
             <li>The red portion corresponds to the RAG on the column.</li>
         </ul>
-        <img src="http://srv-ironman.meritisnet.fr:8510/images/Image3.png" style="display: block; margin: auto; margin-bottom: 20px"/>
+        <img src="https://meritisgroup.github.io/OpenRAG/images/Image3.png" style="display: block; margin: auto; margin-bottom: 20px"/>
         In this example, the answer obtained using the Naive RAG method was judged superior to that of the Naïve Chatbot in 65% of cases for each of the following metrics: Coherence, Relevance, Logic, and Completeness. And was judged superior in 35% of cases for the metric Diversity. 
         <h3>Evaluated Metrics</h3>
         <table>
@@ -286,7 +286,7 @@
             <li>The figures are shown with a confidence interval for each RAG method.</li>
             <li>The associated diagram illustrates the average equivalent consumption in gCO₂, with a confidence interval, for each RAG.</li>
         </ul>
-        <img src="http://srv-ironman.meritisnet.fr:8510/images/Image4.png" style="display: block; margin: auto; margin-bottom: 20px"/>
+        <img src="https://meritisgroup.github.io/OpenRAG/images/Image4.png" style="display: block; margin: auto; margin-bottom: 20px"/>
         In this example, we can estimate that the Semantic Chunking RAG method emitted on average about 4 gCO₂ eq to run the benchmark, with a minimum of around 2 gCO₂ eq and a maximum of approximately 6 gCO₂ eq. 
     </div>
 
@@ -299,7 +299,7 @@
             <li>Each result is presented with its confidence interval to facilitate comparison.</li>
             <li>The corresponding diagram shows the average energy consumption, with a confidence interval, in kWh for each RAG.</li>
         </ul>
-        <img src="http://srv-ironman.meritisnet.fr:8510/images/Image5.png" style="display: block; margin: auto; margin-bottom: 20px"/>
+        <img src="https://meritisgroup.github.io/OpenRAG/images/Image5.png" style="display: block; margin: auto; margin-bottom: 20px"/>
         In this example, we can estimate that the Semantic Chunking RAG method consumed on average about 7 kWh eq to run the benchmark, with a minimum consumption of around 3.5 kWh eq and a maximum of around 10 kWh. 
     </div>
 
