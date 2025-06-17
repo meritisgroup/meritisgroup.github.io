@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Consumption and RAG Evaluation</title>
+    <style>
+        body {
+            font-family: Aptos, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #000000;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h, h1, h2 {
+            color: #005B6A;
+            margin-top: 30px;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #005B6A;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-left: 4px solid #005B6A;
+            padding-left: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .formula {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #3498db;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .note {
+            background-color: #f8f4e5;
+            padding: 10px 15px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Report breakdown</h1>
+    <p>The generated report is fully automated. It takes into account all selected RAGs, as well as the questions and expected answers provided via the XLSX file, to produce a comprehensive document. Each evaluation is based on the so-called “LLM as a judge” method and therefore relies on the ability of an LLM model to judge answers to questions according to different approaches. Each evaluation is presented in detail below, and the number of each part corresponds to the matching section of the report.</p>
+    <div class="note">
+            <p><strong>Notes</strong>: This breakdown lets you measure precisely where token consumption occurs and optimize both your costs and performance.</p>
+            <ul>
+                <li>The “LLM as a judge” methods have limitations; nothing can replace an evaluation carried out by experts. This report is intended to give a first indication of the viability of a solution for the identified use case. </li>
+                <li>Once one or more RAG solutions are selected, a scalability study is necessary to verify their actual performance. </li>
+            </ul>
+        </div>    
+    <h2>Token Consumption</h2>
+
+    <div class="section">
+        <p>A token is the basic unit processed by a language model. Each call to an LLM counts:</p>
+        <ul>
+            <li><strong>Input tokens</strong>: those in your prompt</li>
+            <li><strong>Output tokens</strong>: those generated in the response</li>
+        </ul>
+
+        <p>This token consumption impacts two key aspects:</p>
+        <ul>
+            <li><strong>Cost</strong>: providers charge per processed token</li>
+            <li><strong>Latency</strong>: the more tokens to generate, the longer the response time and greater GPU memory usage</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Token Breakdown by RAG Phase</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Phase</th>
+                    <th>Colors</th>
+                    <th>Input Tokens</th>
+                    <th>Output Tokens</th>
+                    <th>Embedding Tokens</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Indexation</td>
+                    <td>orange, purple, green</td>
+                    <td>Total tokens of all prompts sent </td>
+                    <td>Total token generated </td>
+                    <td>Needed for creating the vector base</td>
+                </tr>
+                <tr>
+                    <td>Queries answering </td>
+                    <td>red, blue</td>
+                    <td>Total tokens of all prompts sent </td>
+                    <td>Total tokens generated </td>
+                    <td>Tokens d’embeddings, Embedding tokens needed to generate the answer </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ul>
+            <li><strong>Input tokens</strong>: sum of the tokens from all prompts sent in each phase</li>
+            <li><strong>Output tokens</strong>: tokens generated during the response phase</li>
+            <li><strong>Embedding tokens</strong>: tokens used to encode documents into the vector database</li>
+        </ul>
+
+        <div class="note">
+            <p><strong>Note</strong>: This breakdown lets you measure precisely where token consumption occurs and optimize both your costs and performance.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Ground Truth Analysis</h2>
+
+        <p>The second diagram compares the responses generated by each RAG method to the expected answer (ground truth). An LLM agent assigns, for each response, a score from 0 to 5 according to three metrics:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Definition</th>
+                    <th>Score Range</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Correctness</td>
+                    <td>Measures the factual accuracy of the agent's response.</td>
+                    <td>0–5</td>
+                </tr>
+                <tr>
+                    <td>Completeness</td>
+                    <td>Evaluates whether the response covers all necessary aspects of the user's query.</td>
+                    <td>0–5</td>
+                </tr>
+                <tr>
+                    <td>Relevance</td>
+                    <td>Assesses how closely the response matches the user's question and intent.</td>
+                    <td>0–5</td>
+                </tr>                
+            </tbody>
+        </table>
+
+        <p>For each question generated via the selected RAG methods, the LLM agent evaluates the response against each metric and assigns a score.</p>
+        <p>We then calculate the average score for each metric across all questions.</p>
+        <p>These averages are displayed in the diagram to compare the quality of the different RAG approaches.</p>
+
+        <p>This evaluation in particular allows testing how effective a RAG method is at retrieving sufficient information to answer the user’s query accurately and comprehensively.</p>
+        <img src="http://srv-ironman.meritisnet.fr:8510/images/Image1.png" style="display: block; margin: auto; margin-bottom: 20px"/>
+        In this example, the Semantic Chunking RAG achieved an average of 4/5 for the Accuracy metric and an average of 4.33/5 for the Relevance and Exhaustiveness metrics. 
+        <div class="note">
+            <p><strong>Note</strong>: The quality of the responses depends heavily on the LLM model used. However, this benchmarking tool focuses exclusively on RAG methods and not on model comparison. Since the same model is employed for all generations, with a sufficiently large sample of questions and answers, this evaluation provides an initial, relevant indication of the relative performance of the selected RAG methods.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Context Analysis</h2>
+
+        <p>The context is the set of information retrieved by the RAG method from the database and appended to the user’s prompt, allowing the LLM agent to generate its answer. It is therefore crucial to evaluate the quality of this retrieved information. The context is evaluated from two different angles:</p>
+
+        <ul>
+            <li><strong>Relevance</strong>: measures the proportion of the context that is useful for answering the question and obtaining the information contained in the expected answer.</li>
+            <li><strong>Faithfulness</strong>: assesses to what extent the context retrieved by a given RAG method actually contains the necessary information to support each element of the expected answer.</li>
+        </ul>
+
+        <h3>Calculation Details:</h3>
+
+        <h4>Context Relevance:</h4>
+        <p>The context is split into segments. For each segment, an LLM agent judges—binary—whether that segment provides directly exploitable information to formulate the expected answer (Useful or Useless). Finally, we compute the proportion of useful segments:</p>
+
+        <div class="formula">
+            Context Relevance = (Number of useful segments / Total number of segments) * 100
+        </div>
+
+        <p>The score ranges from 0 (no assertion is validated) to 100 (all assertions are validated).</p>
+
+        <h4>Context Faithfulness:</h4>
+        <p>We begin by decomposing the reference answer (ground truth) into a series of atomic assertions. Each assertion concerns a single fact or piece of information from the answer. Then, for each assertion, an LLM agent judges—binary—whether the context provides sufficient evidence to validate that assertion (i.e., whether the assertion is supported or not). Finally, we calculate the proportion of supported assertions:</p>
+
+        <div class="formula">
+            Context Faithfulness = (Number of supported statements / Total number of statements) * 100
+        </div>
+
+        <p>The score ranges from 0 (no statement supported) to 100 (all statements supported).</p>
+        Example:
+        <img src="http://srv-ironman.meritisnet.fr:8510/images/Image2.png" style="display: block; margin: auto; margin-bottom: 20px"/>
+        <p>In this example, the Semantic Chunking RAG achieved a score of over 90/100 for context faithfulness—meaning the provided contexts largely allow the questions to be answered—yet it scored only about 6.5/100 for context relevance, indicating that the majority of the text in the provided contexts is useless for answering the questions. </p>
+
+        <p>A subtle balance exists between these two metrics. Relevance measures the “noise” present in the final prompt. Generally, the smaller the model, the less resilient it is to noise, which can cause hallucinations even if all necessary information is present in the retrieved context. Therefore, increasing the amount of context supplied usually raises context faithfulness but also lowers context relevance.</p>
+        <p>There is a subtle trade-off between these two metrics. Relevance measures “noise” in the final prompt. Generally, smaller models are less robust to noise, leading to hallucinations even when all necessary information is present. Increasing context quantity typically improves faithfulness but may reduce relevance.</p>
+
+        <div class="note">
+            <p><strong>Note</strong>: Context relevance scores are often low, as most RAG methods try to fill the context window as much as possible, increasing noise and hallucination risk.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Anwering time</h2>
+        This diagram shows, in seconds, the time required by each RAG method to answer the benchmark questions. These durations depend heavily on the hardware used for testing and do not include the inference times that a deployed application would need to handle. It is intended solely to compare the performance of the different RAG methods against one another. 
+    </div>
+
+    </div>
+
+
+
+
+    <div class="section">
+        <h2>Arena Battles</h2>
+
+        <p>The Arena groups one-on-one evaluations. For each pair of RAG methods, their responses are compared and judged according to several metrics, offering a more detailed comparison between two specific approaches.</p>
+
+        <h3>Pairwise Comparison</h3>
+        <ul>
+            <li>Each pair of RAG methods is evaluated “head-to-head” by an LLM agent.</li>
+            <li>For each metric, each method is assigned a percentage of wins against the other.</li>
+        </ul>
+
+        <h3>Presentation of results</h3>
+        <p>The scores are assembled in a table:</p>
+        <ul>
+            <li>The blue portion corresponds to the RAG on the row (row of the table).</li>
+            <li>The red portion corresponds to the RAG on the column.</li>
+        </ul>
+        <img src="http://srv-ironman.meritisnet.fr:8510/images/Image3.png" style="display: block; margin: auto; margin-bottom: 20px"/>
+        In this example, the answer obtained using the Naive RAG method was judged superior to that of the Naïve Chatbot in 65% of cases for each of the following metrics: Coherence, Relevance, Logic, and Completeness. And was judged superior in 35% of cases for the metric Diversity. 
+        <h3>Evaluated Metrics</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Definition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Completeness</td>
+                    <td>Measures how thoroughly the agent's response covers all aspects of the user's query.</td>
+                </tr>
+                <tr>
+                    <td>Diversity</td>
+                    <td>Assesses the variety in the sources, perspectives, or information provided by the agent.</td>
+                </tr>
+                <tr>
+                    <td>Logic</td>
+                    <td>Evaluates the logical consistency and sound reasoning in the agent's response.</td>
+                </tr>
+                <tr>
+                    <td>Relevance</td>
+                    <td>Determines how closely the agent's response aligns with the user's question and intent.</td>
+                </tr>
+                <tr>
+                    <td>Coherence</td>
+                    <td>Examines the overall clarity and flow of the agent's response, ensuring it is easy to understand.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            <p><strong>Note</strong>: One-on-one evaluation can be tricky, since two very different responses can both be relevant. Therefore, these results should be considered as indicative and complementary to the benchmark study, rather than as absolute judgments.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Energy Consumption</h2>
+        <p><em>This section presents the equivalent consumption in gCO₂ of the different RAG methods evaluated to answer all the benchmark questions. It provides an initial estimate of the overall carbon footprint of an AI solution based on one of these RAG approaches.</em></p>
+        <ul>
+            <li>The results are calculated using the open-source Ecologits library.</li>
+            <li>Only benchmarks performed via OpenAI or Mistral API calls are taken into account.</li>
+            <li>The figures are shown with a confidence interval for each RAG method.</li>
+            <li>The associated diagram illustrates the average equivalent consumption in gCO₂, with a confidence interval, for each RAG.</li>
+        </ul>
+        <img src="http://srv-ironman.meritisnet.fr:8510/images/Image4.png" style="display: block; margin: auto; margin-bottom: 20px"/>
+        In this example, we can estimate that the Semantic Chunking RAG method emitted on average about 4 gCO₂ eq to run the benchmark, with a minimum of around 2 gCO₂ eq and a maximum of approximately 6 gCO₂ eq. 
+    </div>
+
+    <div class="section">
+        <h2>Power consumption</h2>
+        <p><em>This section details the energy consumption in kWh of the same RAG methods, still within the context of the question-answer benchmark. It offers an initial estimate of the energy required to deploy one of these RAG approaches.</em></p>
+        <ul>
+            <li>The calculations also rely on the open-source Ecologits library.</li>
+            <li>Only benchmarks performed via OpenAI or Mistral API calls are included.</li>
+            <li>Each result is presented with its confidence interval to facilitate comparison.</li>
+            <li>The corresponding diagram shows the average energy consumption, with a confidence interval, in kWh for each RAG.</li>
+        </ul>
+        <img src="http://srv-ironman.meritisnet.fr:8510/images/Image5.png" style="display: block; margin: auto; margin-bottom: 20px"/>
+        In this example, we can estimate that the Semantic Chunking RAG method consumed on average about 7 kWh eq to run the benchmark, with a minimum consumption of around 3.5 kWh eq and a maximum of around 10 kWh. 
+    </div>
+
+</body>
+</html>

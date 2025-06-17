@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenRAG Configuration Guide</title>
+    <!-- Styles unchanged -->
+    <style>
+
+        body {
+            font-family: 'Aptos', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #000000;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #005B6A;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #005B6A;
+            font-size: 1.6rem;
+            margin-top: 30px;
+            padding-left: 12px;
+        }
+        h3 {
+            color: #005B6A;
+            font-size: 1.3rem;
+            margin-top: 20px;
+        }
+        p {
+            margin-bottom: 16px;
+        }
+        .section {
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .info-box {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .note {
+            font-style: italic;
+            margin-top: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: #000000;
+            text-align: left;
+            padding: 12px;
+        }
+        td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .feature-card {
+            border: 5px solid #F3F3F3;
+            border-radius: 16px;
+            background-color: #F3F3F3;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .feature-card h3 {
+            color: #005B6A;
+            margin-top: 0;
+            border-bottom: 1px solid F3F3F3;
+            padding-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>OpenRAG by Meritis - Configuration Guide</h1>
+        <p>OpenRAG allows a wide range of configurations and customizations to optimize your Retrieval-Augmented Generation (RAG) systems.</p>
+    </header>
+    
+    <div class="section">
+        <h2>LLM Host</h2>
+        <p>Several LLM backends are supported. To change the default models, update the <code>change_config_server</code> function in <code>./backend/factory_RagAgent.py</code>:</p>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>OpenAI</h3>
+                <p>Integrated via the official openai Python library. An API key must be provided for authentication.</p>
+                <p><strong>Default models:</strong></p>
+                <ul>
+                    <li>Text generation: <code>gpt-4o-mini</code></li>
+                    <li>Embeddings: <code>text-embedding-3-small</code></li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Mistral</h3>
+                <p>Uses the mistral Python client. Requires an API key for authenticated requests.</p>
+                <p><strong>Default models:</strong></p>
+                <ul>
+                    <li>Generation: <code>mistral-small</code></li>
+                    <li>Embedding: <code>mistral-embed</code></li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Ollama</h3>
+                <p>Accessible via the openai Python library using a local endpoint. No API key is required.</p>
+                <p><strong>Default models:</strong></p>
+                <ul>
+                    <li>Generation: <code>gemma2:9b</code></li>
+                    <li>Embeddings: <code>mxbai-embed-large</code></li>
+                </ul>
+                <p class="note">Note: Ollama does not support batch request processing, which can lower throughput under load.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>VLLM</h3>
+                <p>Deployed via a dedicated Docker container that must be running beforehand. Requires a Hugging Face token for model access.</p>
+                <p><strong>Default models:</strong></p>
+                <ul>
+                    <li>Generation: <code>gemma2-9b</code></li>
+                    <li>Embeddings: <code>BAAI/bge-m3</code></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Vectorbase</h2>
+        <p>Two vector storage backends are currently supported, each with different retrieval capabilities suited to various search strategies:</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Vectorbase</th>
+                    <th>Description</th>
+                    <th>Retrieval methods</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Milvus</strong></td>
+                    <td>A high-performance vector database optimized for similarity search.</td>
+                    <td>
+                        <ul>
+                            <li>Retrieval based solely on cosine similarity between embeddings</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>ElasticSearch</strong></td>
+                    <td>A distributed search engine supporting both dense and sparse retrieval.</td>
+                    <td>
+                        <ul>
+                            <li>Embedding-based retrieval (cosine similarity)</li>
+                            <li>BM25 retrieval (probabilistic ranking for full-text search)</li>
+                            <li>Hybrid retrieval combining vector similarity with lexical scoring</li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="section">
+        <h2>Splitter</h2>
+        <p>We have implemented three types of text splitters. These tools break text into chunks. This feature enables users to study the impact of different splitting strategies on the overall RAG performance.</p>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Length Splitting</h3>
+                <p>Splits the text into fixed-size chunks without considering the surrounding context.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Semantic Splitting</h3>
+                <p>This method individually embeds each sentence and analyzes their semantic differences. Sentences with high similarity are grouped into the same chunk, and a new chunk is created when similarity drops below a certain threshold.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Recursive Splitting</h3>
+                <p>A method that splits the text into smaller parts using character limits. It follows a recursive strategy, repeatedly segmenting the text until the target chunk size is met.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Other Configuration Settings</h2>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Language</h3>
+                <p>OpenRAG supports two languages: French and English. The language selected in the configuration tab will define the prompt and response language used by the LLM, regardless of your document’s language.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Query Reformulation</h3>
+                <p>If this setting is enabled, each query will be sent to an LLM for reformulation before being passed to the RAG agent. This increases response time but corrects query issues and rewrites them in terms the RAG system better understands.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Chunk Retrieval</h3>
+                <p>Users can choose the number of chunks to retrieve as context for each query. Too little context lowers the chance of retrieving relevant data; too much context increases cost and might drown key information in irrelevant chunks.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="info-box">
+        <p><strong>Important note:</strong> OpenRAG by Meritis is highly configurable. The parameters described above can be adjusted to optimize performance based on your specific needs and use cases.</p>
+    </div>
+</body>
+</html>

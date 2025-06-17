@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced RAG Variants</title>
+  <style>
+    body {
+      font-family: Aptos, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #000000;
+      margin: 20px;
+    }
+    h1, h2 {
+      color: #005B6A;
+    }
+    h1 {
+      padding-bottom: 15px;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    a {
+    color: #E0B55F;          
+  }
+  
+  </style>
+</head>
+<body>
+  <section>
+    <h2>Advanced RAG</h2>
+    <p>Advanced RAG is a combination of various improvements over the basic RAG, including query reformulation, improved chunking methods, hybrid indexing/search, and reranking.</p>
+  </section>
+
+  <section>
+    <h2>Contextual Retrieval RAG</h2>
+    <p>When indexing each chunk, an LLM reads the surrounding pages and summarizes them in a sentence to explain the chunk given in the context. Each chunk is indexed with this sentence as an introduction. Find out more in the following
+      <a href="https://www.anthropic.com/news/contextual-retrieval" target="_blank">blog post</a>
+      After this step, the standard RAG pipeline is applied as usual.
+    </p>
+  </section>
+
+  <section>
+    <h2>Copali RAG</h2>
+    <p>
+      Copali RAG does not treat documents purely as text, but rather processes them as images.
+       To achieve this, it generates embeddings for both the document pages (as images) and 
+       the user query within the same vector space. This allows the system to retrieve the most
+        relevant “image-based” pages for a given query. 
+      This approach makes it possible to leverage not only textual content but also tables, images,
+       and all other visual elements present in the document. 
+      Once the most relevant pages are retrieved, a Vision-Language Model (VLM) is used to generate
+       an answer. A VLM is a multimodal model capable of understanding both textual and visual inputs. 
+      The main difference between Copali RAG and a standard VLM-based RAG lies in how page/image 
+      embeddings are handled. Instead of generating embeddings for entire pages, Copali RAG splits 
+      each page into smaller image segments. It then computes individual similarity scores for each segment
+       and aggregates these scores to determine the overall relevance of the full page.. 
+       Find out more in the <a href="https://arxiv.org/abs/2407.01449" target="_blank">dedicated article</a>
+    </p>
+  </section>
+
+  <section>
+    <h2>VLM RAG</h2>
+    <p>Unlike traditional RAG systems that treat documents purely as text,
+       VLM-RAG processes each page of a document as an image. It generates embeddings 
+       for both the image-based pages and the user query within the same vector space, 
+       allowing the system to retrieve the most visually and semantically relevant pages
+        for a given query. 
+      This approach enables the model to leverage not only textual information, but
+       also tables, figures, layouts, and other visual elements that are often critical 
+       in complex documents. 
+      Once the most relevant pages are retrieved, a Vision-Language Model (VLM)—a multimodal 
+      model capable of understanding both visual and textual inputs—is used to generate the final answer. </p> </section>
+
+  <section>
+    <h2>Corrective RAG (CRAG)</h2>
+    <p>
+      Instead of blindly relying on retrieved documents, CRAG introduces a correction mechanism
+       to improve the robustness of text generation by large language models (LLMs). When a query
+        is submitted, a lightweight retrieval assessor first evaluates the overall quality 
+        of the retrieved documents. Based on this evaluation, it assigns a confidence level
+         and triggers one of three possible actions: “Correct”, “Incorrect”, or “Ambiguous.” 
+      <ul>
+      <li>If the documents are deemed “Correct”, they undergo a knowledge refinement process. This involves a decomposition-recomposition algorithm that selectively focuses on key information while filtering out irrelevant content. </li>
+      <li>If the documents are considered “Incorrect”, they are discarded. Instead, large-scale web search is used to obtain alternative knowledge sources. The retrieved web content is then refined in a similar manner. </li>
+      <li>If the judgment is “Ambiguous” (i.e., the assessor cannot confidently determine relevance), a hybrid approach is adopted. It combines the refined knowledge from the initially retrieved documents with that obtained from web search. </li>
+      </ul>
+      Finally, the corrected and refined knowledge—whether from initial retrieval, web search,
+       or both—is passed to the LLM to generate the final response. 
+      For a more detailed description of this RAG method. Find out more in the <a href="https://arxiv.org/abs/2401.15884" target="_blank">dedicated article</a>
+     </p>
+  </section>
+
+  <section>
+    <h2>Graph RAG</h2>
+    <p>GraphRAG constructs a knowledge graph from the indexed documents, where nodes 
+      represent entities (such as people, places, or concepts) and edges capture the 
+      relationships between them (e.g., “works at,” “located in”). This structure enables
+       more precise and context-aware information retrieval. Please note that the indexing 
+       process in GraphRAG can be quite long. 
+       Find out more in the <a href="https://arxiv.org/abs/2501.00309" target="_blank">dedicated article</a></p>
+  </section>
+
+  <section>
+    <h2>Main RAG</h2>
+    <p>Main RAG is a multi-agent RAG system that leverages different agents to identify the 
+      most relevant context and rerank the selected information. Research has shown that providing
+       a language model with too much non-essential context can degrade its performance. 
+       Moreover, the order in which context chunks are presented significantly influences 
+       the quality of the response. Main RAG addresses these issues by filtering out 
+       unnecessary context and reranking the remaining chunks before passing them to the LLM.
+       Find out more in the <a href="https://arxiv.org/abs/2501.00332" target="_blank">dedicated article</a></p>
+  </section>
+
+  <section>
+    <h2>Multi Graph RAG</h2>
+    <p>Variant of Graph RAG leveraging multiple graphs.</p>
+  </section>
+
+  <section>
+    <h2>Naive Chatbot</h2>
+    <p> This is a simple LLM, it is implemented to highlight the benefits of RAG.</p>
+  </section>
+
+  <section>
+    <h2>Naive RAG</h2>
+    <p>This is the standard RAG workflow: documents are converted into embeddings and stored in a vector
+       database during the indexing phase. When a user submits a query, it is also embedded, and the most 
+       similar document chunks are retrieved based on vector similarity. These selected chunks are then passed
+        to the language model to generate a response. For more detailed explanation,
+        please consult <a href="https://arxiv.org/abs/2005.11401" target="_blank">this article</a></p>
+  </section>
+
+  <section>
+    <h2>Query-Based RAG</h2>
+    <p>Instead of embedding the raw text of documents, Query-Based RAG uses an LLM to generate a set
+       of questions that can be answered by each document. These generated questions are then embedded 
+       and stored. When a user submits a query, it is also embedded and compared to the precomputed question
+        embeddings. The documents linked to the most semantically similar questions are retrieved and provided
+         as context to the LLM for answering the user’s query,
+          please consult <a href="https://arxiv.org/abs/2407.18044" target="_blank">this article</a></p>
+  </section>
+
+  <section>
+    <h2>Query Reformulation</h2>
+    <p>Query Reformulation uses a naive indexing process for documents. However, when a user submits a query,
+       it is first rewritten to correct typos and improve clarity before being embedded. 
+       This ensures that the language model receives a cleaner and more accurate version of the query,
+        leading to better retrieval and response quality.</p>
+  </section>
+
+  <section>
+    <h2>Reranker RAG</h2>
+    <p>Reranker RAG uses a fine-tuned model to rerank the retrieved chunks to improve overall performance.
+       Research has shown that the order in which context chunks are presented to the language model significantly
+        affects the quality of the generated response. By optimizing this order, Reranker RAG enhances the relevance
+         and coherence of the final answer.</p>
+  </section>
+
+  <section>
+    <h2>Self-RAG</h2>
+    <p>Instead of retrieving a fixed number of documents regardless of context, SELF-RAG enables
+       an LLM to dynamically decide when and what to retrieve based on the needs of each 
+       generation's segment. During generation, the model uses special reflection tokens to determine
+        if retrieval is necessary, evaluate the relevance and factual support of retrieved content,
+         and critique its own output. These tokens allow the model to self-regulate its behavior, 
+         promoting factually accurate and context-sensitive responses. Documents are retrieved on 
+         demand and assessed in parallel, and the most relevant and supportive content is used as grounding.
+          This process improves the factuality, verifiability, and customization of long-form and 
+          knowledge-intensive responses,
+          please consult <a href="https://arxiv.org/abs/2310.11511" target="_blank">this article</a></p>
+  </section>
+
+  <section>
+    <h2>Semantic Chunking RAG</h2>
+    <p> Instead of relying on fixed-size chunking, Semantic Chunking RAG inserts breakpoints between
+       sentences with low semantic similarity. This approach aims to preserve the coherence of ideas
+        by keeping related content together within a single chunk, resulting in more meaningful and 
+        contextually consistent inputs for the language model. For a more detailed description of chunking
+         strategies, please consult <a href="https://arxiv.org/abs/2410.13070" target="_blank">this article</a> </p>
+  </section>
+
+</body>
+</html>
