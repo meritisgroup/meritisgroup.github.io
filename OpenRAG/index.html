@@ -1,52 +1,204 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Liens utiles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenRAG Documentation</title>
   <style>
+    html,
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      font-family: 'Aptos', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #3B3B3B;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200px;
+      background-color: #005B6A;
+      color: #F3F3F3;
+      border-right: 1px solid #ddd;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 3rem;
+      align-items: stretch;
     }
+
+    .sidebar a {
+      display: block;
+      padding: 15px 20px;
+      color: #F3F3F3;
+      text-decoration: none;
+    }
+
+    .sidebar a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .sidebar .logo {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .sidebar .logo img {
+      max-width: 100%;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .sidebar-link {
+      display: block;
+      padding: 15px 20px;
+      color: #F3F3F3;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 18px;
+      border-left: 4px solid transparent;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .sidebar-link:hover {
+      background-color: #f0f0f0;
+      border-left: 4px solid #0B3941;
+      color: #0B3941;
+    }
+
+    .sidebar-link.active {
+      background-color: #e6f0ff;
+      border-left: 4px solid #0B3941;
+      color: #0B3941;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 200px;
+      right: 0;
+      height: 60px;
+      background: #E0B55F;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+    }
+
+    main {
+      position: absolute;
+      top: 60px;
+      left: 200px;
+      right: 0;
+      bottom: 0;
+      padding: 20px;
+      overflow-y: auto;
+      background: #fafafa;
+    }
+
+    /* .lang-toggle button {
+      background: #f5f5f5;
+      border: none;
+      padding: 8px 16px;
+      margin-left: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s ease-in-out;
+      outline: none;
+      box-shadow: none;
+    }
+
+    .lang-toggle button:hover {
+      background-color: #e0e0e0;
+    }
+
+    .lang-toggle button.active {
+      background-color: #005B6A;
+      color: white;
+      border-color: #005B6A;
+    } */
 
     h1 {
-      color: #333;
+      color: #005B6A;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
     }
 
-    .links {
-      display: grid;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .links a {
-      display: block;
-      background-color: #007acc;
-      color: white;
-      padding: 1rem 2rem;
-      text-decoration: none;
-      border-radius: 8px;
-      text-align: center;
-      transition: background 0.3s;
-    }
-
-    .links a:hover {
-      background-color: #005f99;
+    p {
+      margin-bottom: 16px;
     }
   </style>
 </head>
+
 <body>
-  <h1>Liens utiles</h1>
-  <div class="links">
-    <a href="https://meritisgroup.github.io/OpenRAG/report_FR.html" target="_blank">Page 1</a>
-    <a href="https://meritisgroup.github.io/OpenRAG/rags_EN.html" target="_blank">Page 2</a>
-    <a href="https://meritisgroup.github.io/OpenRAG/first_launch_EN.html" target="_blank">Page 3</a>
-    <a href="https://meritisgroup.github.io/OpenRAG/config_EN.html" target="_blank">Page 4</a>
+  <div class="sidebar">
+    <a class="logo" onclick="loadPage('homepage')">
+      <img src="https://meritisgroup.github.io/OpenRAG/images/logomeritis_horizontal.png" />
+    </a>
+    <a class="sidebar-link" onclick="loadPage('first_launch')">First Launch</a>
+    <a class="sidebar-link" onclick="loadPage('rags')">RAGs</a>
+    <a class="sidebar-link" onclick="loadPage('report')">Report</a>
+    <a class="sidebar-link" onclick="loadPage('config')">Configuration</a>
   </div>
+
+  <header>
+    <h1>OpenRAG Documentation</h1>
+    <!-- <div class="lang-toggle">
+      <button id="en-btn" onclick="switchLang('EN')" class="active">EN</button>
+      <button id="fr-btn" onclick="switchLang('FR')">FR</button>
+    </div> -->
+  </header>
+
+  <main id="main-content">
+    <p>Loading...</p>
+  </main>
+
+  <script>
+
+    let currentLang = 'EN';
+    let currentPage = 'homepage';
+
+    // function switchLang(lang) {
+    //   currentLang = lang;
+    //   document.getElementById('en-btn').classList.toggle('active', lang === 'EN');
+    //   document.getElementById('fr-btn').classList.toggle('active', lang === 'FR');
+    //   loadPage(currentPage);
+    // }
+
+    function loadPage(pageSlug) {
+      currentPage = pageSlug;
+      const filename = `${pageSlug}_${currentLang}.html`;
+
+      fetch(filename)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Page not found');
+          }
+          return response.text();
+        })
+        .then(html => {
+          document.getElementById('main-content').innerHTML = html;
+        })
+        .catch(err => {
+          document.getElementById('main-content').innerHTML =
+            '<p style="color: red;">Could not load the page.</p>';
+          console.error(err);
+        });
+    }
+
+    // Load default page
+    window.onload = () => {
+      loadPage('homepage');
+    };
+  </script>
 </body>
+
 </html>

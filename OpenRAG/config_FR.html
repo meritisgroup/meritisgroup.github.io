@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenRAG Configuration Guide</title>
     <style>
-
         body {
             font-family: 'Aptos', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -14,71 +14,88 @@
             margin: 0 auto;
             padding: 20px;
         }
+
         header {
             text-align: center;
             margin-bottom: 40px;
         }
+
         h1 {
             color: #005B6A;
             font-size: 2.2rem;
             margin-bottom: 10px;
             padding-bottom: 10px;
         }
+
         h2 {
             color: #005B6A;
             font-size: 1.6rem;
             margin-top: 30px;
             padding-left: 12px;
         }
+
         h3 {
             color: #005B6A;
             font-size: 1.3rem;
             margin-top: 20px;
         }
+
         p {
             margin-bottom: 16px;
         }
+
         .section {
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 30px;
         }
+
         .info-box {
             padding: 15px;
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .note {
-            font-style: italic;
-            margin-top: 8px;
+            background-color: #f8f4e5;
+            padding: 10px 15px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
         }
+
         th {
             background-color: var(--primary-color);
             color: #000000;
             text-align: left;
             padding: 12px;
         }
+
         td {
             border: 1px solid var(--border-color);
             padding: 12px;
         }
+
         ul {
             padding-left: 20px;
         }
+
         li {
             margin-bottom: 8px;
         }
+
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
             margin: 20px 0;
         }
+
         .feature-card {
             border: 5px solid #F3F3F3;
             border-radius: 16px;
@@ -86,6 +103,7 @@
             padding: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         .feature-card h3 {
             color: #005B6A;
             margin-top: 0;
@@ -94,27 +112,29 @@
         }
     </style>
 </head>
+
 <body>
-    <header>
-        <h1>OpenRAG by Meritis - Guide de Configuration</h1>
-        <p>OpenRAG permet une grande variété de configurations et de personnalisations pour optimiser vos systèmes de RAG (Retrieval-Augmented Generation).</p>
-    </header>
-    
+
+    <h1>Guide de Configuration</h1>
+
     <div class="section">
         <h2>LLM Host</h2>
-        <p>Plusieurs backends LLM sont pris en charge. Pour modifier les modèles par défaut, mettez à jour la fonction <code>change_config_server</code> dans <code>./backend/factory_RagAgent.py</code>:</p>
-        
+        <p>Plusieurs backends LLM sont pris en charge. Pour modifier les modèles par défaut, mettez à jour la fonction
+            <code>change_config_server</code> dans <code>./backend/factory_RagAgent.py</code>:
+        </p>
+
         <div class="feature-grid">
             <div class="feature-card">
                 <h3>OpenAI</h3>
-                <p>Intégré via la bibliothèque Python officielle openai. Une clé API doit être fournie pour l'authentification.</p>
+                <p>Intégré via la bibliothèque Python officielle openai. Une clé API doit être fournie pour
+                    l'authentification.</p>
                 <p><strong>Modèles par défaut :</strong></p>
                 <ul>
                     <li>Génération de texte : <code>gpt-4o-mini</code></li>
                     <li>Embeddings : <code>text-embedding-3-small</code></li>
                 </ul>
             </div>
-            
+
             <div class="feature-card">
                 <h3>Mistral</h3>
                 <p>Utilise le client Python mistral. Nécessite une clé API pour authentifier les requêtes.</p>
@@ -124,21 +144,24 @@
                     <li>Embedding : <code>mistral-embed</code></li>
                 </ul>
             </div>
-            
+
             <div class="feature-card">
                 <h3>Ollama</h3>
-                <p>Accessible via la bibliothèque Python openai en utilisant un endpoint local. Aucune clé API n'est nécessaire.</p>
+                <p>Accessible via la bibliothèque Python openai en utilisant un endpoint local. Aucune clé API n'est
+                    nécessaire.</p>
                 <p><strong>Modèles par défaut :</strong></p>
                 <ul>
                     <li>Génération : <code>gemma2:9b</code></li>
                     <li>Embeddings : <code>mxbai-embed-large</code></li>
                 </ul>
-                <p class="note">Note : Ollama ne prend pas en charge le traitement par lots des requêtes, ce qui peut réduire le débit sous charge.</p>
+                <p class="note">Note : Ollama ne prend pas en charge le traitement par lots des requêtes, ce qui peut
+                    réduire le débit sous charge.</p>
             </div>
-            
+
             <div class="feature-card">
                 <h3>VLLM</h3>
-                <p>Déployé via un conteneur Docker dédié qui doit être en cours d'exécution avant utilisation. Nécessite un token Hugging Face pour l'accès aux modèles.</p>
+                <p>Déployé via un conteneur Docker dédié qui doit être en cours d'exécution avant utilisation. Nécessite
+                    un token Hugging Face pour l'accès aux modèles.</p>
                 <p><strong>Modèles par défaut :</strong></p>
                 <ul>
                     <li>Génération : <code>gemma2-9b</code></li>
@@ -147,11 +170,12 @@
             </div>
         </div>
     </div>
-    
+
     <div class="section">
         <h2>Vectorbase</h2>
-        <p>Deux backends de stockage de vecteurs sont actuellement pris en charge, chacun avec des capacités de récupération distinctes adaptées à différentes stratégies de recherche :</p>
-        
+        <p>Deux backends de stockage de vecteurs sont actuellement pris en charge, chacun avec des capacités de
+            récupération distinctes adaptées à différentes stratégies de recherche :</p>
+
         <table>
             <thead>
                 <tr>
@@ -162,13 +186,14 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>Milvus</strong></td>
-                    <td>Une base de données vectorielle haute performance optimisée pour la recherche de similarité.</td>
+                    <!-- <td><strong>Milvus</strong></td>
+                    <td>Une base de données vectorielle haute performance optimisée pour la recherche de similarité.
+                    </td>
                     <td>
                         <ul>
                             <li>Récupération basée uniquement sur la similarité cosinus entre les embeddings</li>
                         </ul>
-                    </td>
+                    </td> -->
                 </tr>
                 <tr>
                     <td><strong>ElasticSearch</strong></td>
@@ -176,7 +201,8 @@
                     <td>
                         <ul>
                             <li>Récupération basée sur les embeddings (similarité cosinus)</li>
-                            <li>Récupération BM25 (fonction de classement probabiliste pour la recherche en texte intégral)</li>
+                            <li>Récupération BM25 (fonction de classement probabiliste pour la recherche en texte
+                                intégral)</li>
                             <li>Récupération hybride qui combine la similarité vectorielle avec le scoring lexical</li>
                         </ul>
                     </td>
@@ -184,52 +210,70 @@
             </tbody>
         </table>
     </div>
-    
+
     <div class="section">
         <h2>Splitter</h2>
-        <p>Nous avons implémenté trois types de découpeurs de texte. Ce sont des outils qui découpent les textes en morceaux (chunks). Cette fonctionnalité permettra à l'utilisateur d'étudier l'impact des découpeurs de texte sur les performances globales du RAG.</p>
-        
+        <p>Nous avons implémenté trois types de découpeurs de texte. Ce sont des outils qui découpent les textes en
+            morceaux (chunks). Cette fonctionnalité permettra à l'utilisateur d'étudier l'impact des découpeurs de texte
+            sur les performances globales du RAG.</p>
+
         <div class="feature-grid">
             <div class="feature-card">
                 <h3>Length Splitting</h3>
-                <p>Sépare le texte en morceaux de taille fixe, sans prêter attention au contexte entourant la coupure.</p>
+                <p>Sépare le texte en morceaux de taille fixe, sans prêter attention au contexte entourant la coupure.
+                </p>
             </div>
-            
+
             <div class="feature-card">
                 <h3>Semantic Splitting</h3>
-                <p>Cette méthode intègre individuellement chaque phrase du texte et analyse leurs différences sémantiques. Les phrases avec une forte similarité sont regroupées dans un seul morceau, et un nouveau morceau est initié une fois que la similarité tombe en dessous d'un certain seuil.</p>
+                <p>Cette méthode intègre individuellement chaque phrase du texte et analyse leurs différences
+                    sémantiques. Les phrases avec une forte similarité sont regroupées dans un seul morceau, et un
+                    nouveau morceau est initié une fois que la similarité tombe en dessous d'un certain seuil.</p>
             </div>
-            
+
             <div class="feature-card">
                 <h3>Recursive Splitting</h3>
-                <p>Une méthode qui divise le texte en plus petits morceaux en utilisant des limites de caractères. Elle suit une stratégie récursive, segmentant à plusieurs reprises le texte jusqu'à ce que la taille cible du morceau soit atteinte.</p>
+                <p>Une méthode qui divise le texte en plus petits morceaux en utilisant des limites de caractères. Elle
+                    suit une stratégie récursive, segmentant à plusieurs reprises le texte jusqu'à ce que la taille
+                    cible du morceau soit atteinte.</p>
             </div>
         </div>
     </div>
-    
+
     <div class="section">
         <h2>Autres paramètres de configuration</h2>
-        
+
         <div class="feature-grid">
             <div class="feature-card">
                 <h3>Language</h3>
-                <p>OpenRAG dispose de deux langues disponibles, le français et l'anglais. La définition de la langue dans l'onglet de configuration définira les langues des prompts envoyés au LLM et la langue des réponses données par le RAG, indépendamment de la langue de votre document.</p>
+                <p>OpenRAG dispose de deux langues disponibles, le français et l'anglais. La définition de la langue
+                    dans l'onglet de configuration définira les langues des prompts envoyés au LLM et la langue des
+                    réponses données par le RAG, indépendamment de la langue de votre document.</p>
             </div>
-            
+
             <div class="feature-card">
                 <h3>Query Reformulation</h3>
-                <p>Si ce paramètre est activé, chaque requête sera envoyée à un LLM pour être reformulée avant d'être envoyée à l'agent RAG. Cela augmentera le temps de réponse mais corrigera toute erreur dans la requête et la récrira en termes avec lesquels le RAG est à l'aise pour essayer d'améliorer ses performances.</p>
+                <p>Si ce paramètre est activé, chaque requête sera envoyée à un LLM pour être reformulée avant d'être
+                    envoyée à l'agent RAG. Cela augmentera le temps de réponse mais corrigera toute erreur dans la
+                    requête et la récrira en termes avec lesquels le RAG est à l'aise pour essayer d'améliorer ses
+                    performances.</p>
             </div>
-            
+
             <div class="feature-card">
                 <h3>Chunk Retrieval</h3>
-                <p>L'utilisateur pourra également choisir le nombre de morceaux à récupérer comme contexte pour chaque requête. Un contexte insuffisant réduit les chances de récupérer des informations pertinentes ; trop de contexte augmentera considérablement le coût et pourrait noyer les informations pertinentes dans des morceaux non pertinents.</p>
+                <p>L'utilisateur pourra également choisir le nombre de morceaux à récupérer comme contexte pour chaque
+                    requête. Un contexte insuffisant réduit les chances de récupérer des informations pertinentes ; trop
+                    de contexte augmentera considérablement le coût et pourrait noyer les informations pertinentes dans
+                    des morceaux non pertinents.</p>
             </div>
         </div>
     </div>
-    
+
     <div class="info-box">
-        <p><strong>Note importante :</strong> OpenRAG by Meritis est hautement configurable. Les paramètres décrits ci-dessus peuvent être ajustés pour optimiser les performances en fonction de vos besoins spécifiques et de vos cas d'utilisation.</p>
+        <p><strong>Note importante :</strong> OpenRAG by Meritis est hautement configurable. Les paramètres décrits
+            ci-dessus peuvent être ajustés pour optimiser les performances en fonction de vos besoins spécifiques et de
+            vos cas d'utilisation.</p>
     </div>
 </body>
+
 </html>

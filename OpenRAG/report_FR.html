@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,32 +14,24 @@
             margin: 0 auto;
             padding: 20px;
         }
-        h1, h2 {
-            color: #005B6A;
-            margin-top: 30px;
-        }
-        h1 {
-            text-align: center;
-            border-bottom: 2px solid #005B6A;
-            padding-bottom: 10px;
-        }
-        h2 {
-            border-left: 4px solid #005B6A;
-            padding-left: 10px;
-        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px 12px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         .formula {
             background-color: #f9f9f9;
             padding: 10px;
@@ -47,37 +40,41 @@
             margin: 15px 0;
             font-family: 'Courier New', monospace;
         }
+
         .note {
             background-color: #f8f4e5;
             padding: 10px 15px;
             border-left: 4px solid #f0ad4e;
             margin: 15px 0;
         }
+
         .section {
             margin-bottom: 40px;
         }
     </style>
 </head>
+
 <body>
     <h1>La Consommation de Tokens</h1>
-    
+
     <div class="section">
         <p>Un token est l'unité de base traitée par un modèle de langage. Chaque appel à une API LLM compte :</p>
         <ul>
             <li><strong>Tokens d'entrée</strong> : ceux de votre prompt</li>
             <li><strong>Tokens de sortie</strong> : ceux générés par la réponse</li>
         </ul>
-        
+
         <p>Cette consommation de tokens influence deux aspects clés :</p>
         <ul>
             <li><strong>Coût</strong> : les fournisseurs facturent par token traité</li>
-            <li><strong>Latence</strong> : plus il y a de tokens à générer, plus le temps de réponse augmente et plus la mémoire GPU est sollicitée</li>
+            <li><strong>Latence</strong> : plus il y a de tokens à générer, plus le temps de réponse augmente et plus la
+                mémoire GPU est sollicitée</li>
         </ul>
     </div>
-    
+
     <div class="section">
         <h2>Décomposition des tokens selon les phases du RAG</h2>
-        
+
         <table>
             <thead>
                 <tr>
@@ -105,23 +102,26 @@
                 </tr>
             </tbody>
         </table>
-        
+
         <ul>
             <li><strong>Tokens d'entrée</strong> : somme des tokens de tous les prompts envoyés à chaque phase</li>
             <li><strong>Tokens de sortie</strong> : tokens générés lors de la phase de réponse</li>
-            <li><strong>Tokens d'embedding</strong> : tokens utilisés pour encoder les documents dans la base vectorielle</li>
+            <li><strong>Tokens d'embedding</strong> : tokens utilisés pour encoder les documents dans la base
+                vectorielle</li>
         </ul>
-        
+
         <div class="note">
-            <p><strong>Remarque</strong> : Cette répartition vous permet de mesurer précisément où se situe la consommation de tokens et d'optimiser à la fois vos coûts et vos performances.</p>
+            <p><strong>Remarque</strong> : Cette répartition vous permet de mesurer précisément où se situe la
+                consommation de tokens et d'optimiser à la fois vos coûts et vos performances.</p>
         </div>
     </div>
-    
+
     <div class="section">
         <h2>Ground Truth Analysis</h2>
-        
-        <p>Le second diagramme compare les réponses générées par chaque méthode RAG à la réponse attendue (vérité terrain). Un agent LLM attribue, pour chaque réponse, une note de 0 à 5 selon trois métriques :</p>
-        
+
+        <p>Le second diagramme compare les réponses générées par chaque méthode RAG à la réponse attendue (vérité
+            terrain). Un agent LLM attribue, pour chaque réponse, une note de 0 à 5 selon trois métriques :</p>
+
         <table>
             <thead>
                 <tr>
@@ -148,73 +148,97 @@
                 </tr>
             </tbody>
         </table>
-        
-        <p>Pour chaque question générée via les méthodes RAG sélectionnées, l'agent LLM évalue la réponse pour chaque métrique et donne une note.</p>
+
+        <p>Pour chaque question générée via les méthodes RAG sélectionnées, l'agent LLM évalue la réponse pour chaque
+            métrique et donne une note.</p>
         <p>On calcule ensuite la moyenne des notes de chaque métrique sur l'ensemble des questions.</p>
         <p>Ces moyennes sont affichées dans le diagramme pour comparer la qualité des différentes approches RAG.</p>
-        
-        <p>Cette évaluation permet en particulier de tester l'efficacité d'une méthode de RAG à récupérer suffisamment d'information pour répondre de façon précise et exhaustive à la réponse de l'utilisateur.</p>
-        
+
+        <p>Cette évaluation permet en particulier de tester l'efficacité d'une méthode de RAG à récupérer suffisamment
+            d'information pour répondre de façon précise et exhaustive à la réponse de l'utilisateur.</p>
+
         <div class="note">
-            <p><strong>Remarque</strong> : la qualité des réponses dépend fortement du modèle LLM utilisé. Toutefois, cet outil de benchmark se concentre uniquement sur les méthodes RAG et non sur la comparaison de modèles. Étant donné que le même modèle est employé pour toutes les générations, avec un échantillon de questions/réponses suffisamment large, cette évaluation fournit une première indication pertinente des performances relatives des méthodes RAG sélectionnées.</p>
+            <p><strong>Remarque</strong> : la qualité des réponses dépend fortement du modèle LLM utilisé. Toutefois,
+                cet outil de benchmark se concentre uniquement sur les méthodes RAG et non sur la comparaison de
+                modèles. Étant donné que le même modèle est employé pour toutes les générations, avec un échantillon de
+                questions/réponses suffisamment large, cette évaluation fournit une première indication pertinente des
+                performances relatives des méthodes RAG sélectionnées.</p>
         </div>
     </div>
-    
+
     <div class="section">
         <h2>Context Analysis</h2>
-        
-        <p>Le contexte est l'ensemble des informations retrouvées par la méthode RAG dans la base données qui ont été ajouté au prompt de l'utilisateur permettant à l'agent LLM de générer la réponse. Il est donc crucial d'évaluer la qualité de ces informations. L'évaluation du contexte sous deux angles différents :</p>
-        
+
+        <p>Le contexte est l'ensemble des informations retrouvées par la méthode RAG dans la base données qui ont été
+            ajouté au prompt de l'utilisateur permettant à l'agent LLM de générer la réponse. Il est donc crucial
+            d'évaluer la qualité de ces informations. L'évaluation du contexte sous deux angles différents :</p>
+
         <ul>
-            <li><strong>La Pertinence</strong> : calcul la proportion du contexte utile pour répondre à la question et obtenir les informations contenues dans la réponse attendue</li>
-            <li><strong>La Fidélité</strong> : évalue dans quelle mesure le contexte récupéré par une méthode RAG contient réellement l'information nécessaire pour justifier chaque élément de la réponse attendue</li>
+            <li><strong>La Pertinence</strong> : calcul la proportion du contexte utile pour répondre à la question et
+                obtenir les informations contenues dans la réponse attendue</li>
+            <li><strong>La Fidélité</strong> : évalue dans quelle mesure le contexte récupéré par une méthode RAG
+                contient réellement l'information nécessaire pour justifier chaque élément de la réponse attendue</li>
         </ul>
-        
+
         <h3>Détails des calculs :</h3>
-        
+
         <h4>Pertinence du contexte (Context Relevance) :</h4>
-        <p>Le contexte est découpé en segments, puis, pour chaque segment du contexte un agent LLM juge si ce segment apporte des informations directement exploitables pour formuler la réponse attendue de façon binaire (Utile ou Inutile). Enfin, on calcule la proportion de segments utile :</p>
-        
+        <p>Le contexte est découpé en segments, puis, pour chaque segment du contexte un agent LLM juge si ce segment
+            apporte des informations directement exploitables pour formuler la réponse attendue de façon binaire (Utile
+            ou Inutile). Enfin, on calcule la proportion de segments utile :</p>
+
         <div class="formula">
             Context Relevance = (Nombre de segments utiles / Nombre total de segments) * 100
         </div>
-        
+
         <p>Le score varie de 0 (aucun segment est utile) à 100 (tous les segments sont utiles).</p>
-        
+
         <h4>Fidélité du contexte (Context faithfulness) :</h4>
-        <p>On commence par décomposer la réponse de référence (ground truth) en une série d'affirmations atomiques. Chaque affirmation porte sur un fait ou une information unique de la réponse. Puis, pour chaque affirmation, un agent LLM juge de façon binaire si le contexte fournit suffisamment d'éléments pour valider cette affirmation (l'affirmation est soit prise en charge ou non). Enfin, on calcule la proportion d'affirmations prises en compte :</p>
-        
+        <p>On commence par décomposer la réponse de référence (ground truth) en une série d'affirmations atomiques.
+            Chaque affirmation porte sur un fait ou une information unique de la réponse. Puis, pour chaque affirmation,
+            un agent LLM juge de façon binaire si le contexte fournit suffisamment d'éléments pour valider cette
+            affirmation (l'affirmation est soit prise en charge ou non). Enfin, on calcule la proportion d'affirmations
+            prises en compte :</p>
+
         <div class="formula">
             Context Faithfulness = (Nombre d'affirmations prises en charges / Nombre total d'affirmations) * 100
         </div>
-        
+
         <p>Le score varie de 0 (aucune affirmation validée) à 100 (toutes les affirmations validées).</p>
-        
-        <p>Un équilibre subtil s'opère entre ces deux métriques. La pertinence permet d'évaluer le "bruit" présent dans le prompt final. En général, plus les modèles sont petits, moins ils sont résiliant aux bruits et cela peut être la cause d'hallucinations même si toutes les informations nécessaires sont dans le contexte retrouvés. Ainsi, augmenter la quantité de contexte fourni permet en général d'augmenter la fidélité du contexte mais fait également diminuer la pertinence de ce dernier.</p>
-        
+
+        <p>Un équilibre subtil s'opère entre ces deux métriques. La pertinence permet d'évaluer le "bruit" présent dans
+            le prompt final. En général, plus les modèles sont petits, moins ils sont résiliant aux bruits et cela peut
+            être la cause d'hallucinations même si toutes les informations nécessaires sont dans le contexte retrouvés.
+            Ainsi, augmenter la quantité de contexte fourni permet en général d'augmenter la fidélité du contexte mais
+            fait également diminuer la pertinence de ce dernier.</p>
+
         <div class="note">
-            <p><strong>Remarque</strong> : les scores de pertinence du contexte sont souvent faibles, la plupart des méthodes RAG cherchent à remplir au maximum la fenêtre de contexte, au risque d'ajouter du bruit et d'accroître les hallucinations.</p>
+            <p><strong>Remarque</strong> : les scores de pertinence du contexte sont souvent faibles, la plupart des
+                méthodes RAG cherchent à remplir au maximum la fenêtre de contexte, au risque d'ajouter du bruit et
+                d'accroître les hallucinations.</p>
         </div>
     </div>
-    
+
     <div class="section">
         <h2>Arena battles</h2>
-        
-        <p>L'Arène regroupe des évaluations en un contre un. Pour chaque paire de méthodes RAG, leurs réponses sont confrontées et jugées selon plusieurs métriques, offrant une comparaison plus fine entre deux approches spécifiques.</p>
-        
+
+        <p>L'Arène regroupe des évaluations en un contre un. Pour chaque paire de méthodes RAG, leurs réponses sont
+            confrontées et jugées selon plusieurs métriques, offrant une comparaison plus fine entre deux approches
+            spécifiques.</p>
+
         <h3>Comparaison pairwise</h3>
         <ul>
             <li>Chaque paire de RAG est évaluée "tête-à-tête" par un agent LLM.</li>
             <li>Pour chaque métrique, on attribue à chacun un pourcentage de victoires face à l'autre.</li>
         </ul>
-        
+
         <h3>Présentation des résultats</h3>
         <p>Les scores sont rassemblés dans un tableau :</p>
         <ul>
             <li>La partie bleue correspond au RAG en ligne (ligne du tableau).</li>
             <li>La partie rouge correspond au RAG en colonne.</li>
         </ul>
-        
+
         <h3>Métriques évaluées</h3>
         <table>
             <thead>
@@ -226,7 +250,8 @@
             <tbody>
                 <tr>
                     <td>Exhaustivité</td>
-                    <td>Mesure dans quelle mesure la réponse couvre tous les aspects de la requête de l'utilisateur.</td>
+                    <td>Mesure dans quelle mesure la réponse couvre tous les aspects de la requête de l'utilisateur.
+                    </td>
                 </tr>
                 <tr>
                     <td>Diversité</td>
@@ -238,23 +263,28 @@
                 </tr>
                 <tr>
                     <td>Pertinence</td>
-                    <td>Détermine dans quelle mesure la réponse correspond à la question et à l'intention de l'utilisateur.</td>
+                    <td>Détermine dans quelle mesure la réponse correspond à la question et à l'intention de
+                        l'utilisateur.</td>
                 </tr>
                 <tr>
                     <td>Cohérence</td>
-                    <td>Examine la clarté et la fluidité globale de la réponse pour s'assurer qu'elle est facile à comprendre.</td>
+                    <td>Examine la clarté et la fluidité globale de la réponse pour s'assurer qu'elle est facile à
+                        comprendre.</td>
                 </tr>
             </tbody>
         </table>
-        
+
         <div class="note">
-            <p><strong>Remarque</strong> : l'évaluation en un contre un peut être délicate, car des réponses très différentes peuvent toutes deux être pertinentes. Ces résultats doivent donc être considérés à titre indicatifs et complémentaires à l'étude de benchmark plutôt que des jugements absolus.</p>
+            <p><strong>Remarque</strong> : l'évaluation en un contre un peut être délicate, car des réponses très
+                différentes peuvent toutes deux être pertinentes. Ces résultats doivent donc être considérés à titre
+                indicatifs et complémentaires à l'étude de benchmark plutôt que des jugements absolus.</p>
         </div>
     </div>
-    
+
     <div class="section">
         <h2>Consommation énergétique</h2>
         <p><em>Cette section est mentionnée mais non détaillée dans le document original.</em></p>
     </div>
 </body>
+
 </html>
